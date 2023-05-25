@@ -37,6 +37,7 @@ inputs:
   poetry-version:
     description: 'Version of poetry. Latest if not specified.'
     required: false
+    default: false
   poetry-groups:
     description: 'Poetry group names with the dependencies for the tests.'
     required: false

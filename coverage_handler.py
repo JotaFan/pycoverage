@@ -14,7 +14,6 @@ coverage_file = Path(COVERAGE_FILE_PATH)
 with coverage_file.open('r') as file:
     data = json.load(file)
 output = list()
-print(data)
 
 total_coverage = round(data["totals"]["percent_covered"], 2)
 color = 'red'
