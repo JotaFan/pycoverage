@@ -80,6 +80,7 @@ then
     python -m pip install -r $package_extras
   else
     python -m pip install $TESTING_TOOLS
+  fi
 else
   echo "Can not detect your package manager :("
   exit 1
