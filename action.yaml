@@ -117,6 +117,19 @@ runs:
       uses: peter-evans/commit-comment@v2.0.1
       with:
         body: ${{ steps.run-tests.outputs.output-table }}
+    - name: Commit files
+      if: steps.verify-changed-files.outputs.files_changed == 'true'
+      run: |
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
+        git add "${{ inputs.output }}"
+        git commit -m "Updated coverage.svg"
+    - name: Push changes
+      if: steps.verify-changed-files.outputs.files_changed == 'true'
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.github_token }}
+        branch: ${{ github.ref }}        
     - id: check-threashold
       run: |
         if [ "${{ steps.run-tests.outputs.cov-threshold-single-fail }}" == "true" ]; then
