@@ -41,7 +41,7 @@ then
     python -m pip install poetry
   fi
   python -m poetry config virtualenvs.create false
-  poetry_groups=$8
+  poetry_groups=$9
   if [ $poetry_groups ] 
   then
     arguments_groups=''
