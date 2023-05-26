@@ -46,6 +46,14 @@ inputs:
     description: 'Package extras with the dependencies for the tests, or dev-requirement file if pip'
     required: false
     default: 'dev,tests'
+  output:
+    description: 'Output path to write the coverage badge.'
+    required: false
+    default: 'badges/coverage.svg'
+  overwrite:
+    description: 'Overwrite an existing coverage badge.'
+    required: false
+    default: 'true'
 
 outputs:
   output-table: # id of output
@@ -79,7 +87,16 @@ runs:
         echo "PULL_NUMBER=`echo ${{ github.event.pull_request.number }}`" >> $GITHUB_ENV
         echo "COMMIT_URL=`echo https://github.com/${{ github.repository }}/pull/${{ github.event.pull_request.number }}/commits/${{ github.event.after }}`" >> $GITHUB_ENV
       shell: bash
-    - uses: peter-evans/find-comment@v2.4.0
+    - run: |
+        pip install -U coverage-badge
+        EXTRA_ARGS=""
+        if [[ '${{ inputs.overwrite }}' == 'true'  ]]; then
+          EXTRA_ARGS+="-f"
+        fi
+        mkdir -p badges
+        coverage-badge $EXTRA_ARGS -o "${{ inputs.output }}"
+      shell: bash
+  - uses: peter-evans/find-comment@v2.4.0
       if: ${{ env.PULL_NUMBER }}
       id: fc
       with:
