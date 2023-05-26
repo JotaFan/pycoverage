@@ -71,6 +71,12 @@ jobs:
           poetry-version: 1.4.2
           package-extras: dev,tests
 ```
+Add the badge to your README.md
+
+    <!-- README.md -->
+    + [![cov](https://<you>.github.io/<repo>/badges/coverage.svg)](https://github.com/<you>/<repo>/actions)
+
+Replace the `<you>` and `<repo>` above, like:
 
 If you feel generous and want to show some extra appreciation:
 
