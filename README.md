@@ -70,3 +70,14 @@ jobs:
           async-tests: true
           poetry-version: 1.4.2
           package-extras: dev,tests
+```
+
+If you feel generous and want to show some extra appreciation:
+
+Support this project with a :star:
+
+[![Buy me a coffee][buymeacoffee-shield]][buymeacoffee]
+
+[buymeacoffee]: https://www.buymeacoffee.com/jotaflamev
+
+[buymeacoffee-shield]: https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png
