@@ -95,7 +95,7 @@ cat << EOF > "$COV_CONFIG_FILE"
 omit = $4
 EOF
 
-pip install -U coverage
+pip install -U $TESTING_TOOLS
 # Run pytest
 coverage run --source="$2" --rcfile=.coveragerc  -m pytest "$3" --cov-report term-missing
 
