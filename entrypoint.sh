@@ -10,6 +10,7 @@
 # $8: poetry-version
 # $9: poetry-groups
 # $10: package-extras
+# $11: badge-output
 
 
 COV_CONFIG_FILE=.coveragerc
@@ -130,3 +131,12 @@ echo "$TABLE" >> $GITHUB_OUTPUT
 echo "EOF" >> $GITHUB_OUTPUT
 echo "cov-threshold-single-fail=$COV_THRESHOLD_SINGLE_FAIL" >> $GITHUB_OUTPUT
 echo "cov-threshold-total-fail=$COV_THRESHOLD_TOTAL_FAIL" >> $GITHUB_OUTPUT
+
+
+pip install -U coverage-badge
+EXTRA_ARGS=""
+if [[ '${{ inputs.overwrite }}' == 'true'  ]]; then
+  EXTRA_ARGS+="-f"
+fi
+mkdir -p badges
+coverage-badge $EXTRA_ARGS -o $11

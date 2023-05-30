@@ -84,20 +84,12 @@ runs:
         ${{ inputs.poetry-version }} \
         ${{ inputs.poetry-groups }} \
         ${{ inputs.package-extras }} \
+        ${{ inputs.output }} \
       shell: bash
     - run: |
         echo "SHORT_SHA=`echo ${{github.event.after}} | cut -c1-7`" >> $GITHUB_ENV
         echo "PULL_NUMBER=`echo ${{ github.event.pull_request.number }}`" >> $GITHUB_ENV
         echo "COMMIT_URL=`echo https://github.com/${{ github.repository }}/pull/${{ github.event.pull_request.number }}/commits/${{ github.event.after }}`" >> $GITHUB_ENV
-      shell: bash
-    - run: |
-        pip install -U coverage-badge
-        EXTRA_ARGS=""
-        if [[ '${{ inputs.overwrite }}' == 'true'  ]]; then
-          EXTRA_ARGS+="-f"
-        fi
-        mkdir -p badges
-        coverage-badge $EXTRA_ARGS -o "${{ inputs.output }}"
       shell: bash
     - uses: peter-evans/find-comment@v2.4.0
       if: ${{ env.PULL_NUMBER }}
