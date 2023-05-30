@@ -1,6 +1,8 @@
 # pycoverage
 
-his GitHub action runs python tests using `pytest` and creates a comment for PR with a coverage table.
+Initialy forked from [pytest-reporter](https://github.com/dima-engineer/pytest-reporter)
+
+This GitHub action runs python tests using `pytest` and creates a comment for PR with a coverage table.
 It supports projects with the most popular python package managers (`pip`, `poetry`, `pipenv`)
 
 [![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org)
