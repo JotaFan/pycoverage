@@ -98,10 +98,12 @@ EOF
 if [ -f "./pyproject.toml" ] && [ -f "./poetry.lock" ]
 then
   poetry run coverage run --source="$2" --rcfile=.coveragerc  -m pytest "$3" --cov-report term-missing
+  poetry run coverage json -o coverage.json
 else
   pip install -U $TESTING_TOOLS
   # Run pytest
   coverage run --source="$2" --rcfile=.coveragerc  -m pytest "$3" --cov-report term-missing
+  coverage json -o coverage.json
 fi
 
 if [ $? == 1 ]
@@ -110,7 +112,6 @@ then
   exit 1
 fi
 
-coverage json -o coverage.json
 
 export COVERAGE_SINGLE_THRESHOLD="$5"
 export COVERAGE_TOTAL_THRESHOLD="$6"
