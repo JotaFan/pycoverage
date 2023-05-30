@@ -53,6 +53,7 @@ inputs:
   github_token:
     description: 'GitHub writing token'
     required: false
+    default: ''
   working_branch:
     description: 'Working branch'
     required: false
@@ -129,7 +130,7 @@ runs:
             badges/*
 
     - name: Commit files
-      if: ${{ steps.verify-changed-files.outputs.files_changed == 'true' }} and ${{inputs.commit_badge == 'true' }} 
+      if: ${{ (steps.verify-changed-files.outputs.files_changed == 'true') && (inputs.commit_badge == 'true') }} 
       run: |
         git config --local user.email "github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"
@@ -137,7 +138,7 @@ runs:
         git commit -m "chore: updating coverage.svg" --no-verify
       shell: bash
     - name: Push changes
-      if: ${{ steps.verify-changed-files.outputs.files_changed == 'true' }} and ${{inputs.commit_badge == 'true' }} 
+      if: ${{ (steps.verify-changed-files.outputs.files_changed == 'true') && (inputs.commit_badge == 'true') }} 
       uses: ad-m/github-push-action@master
       with:
         github_token: ${{ inputs.github_token }}
