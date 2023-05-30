@@ -54,6 +54,9 @@ inputs:
     description: 'Overwrite an existing coverage badge.'
     required: false
     default: 'true'
+  github_token:
+    description: 'GitHub writing token'
+    required: true
 
 outputs:
   output-table: # id of output
@@ -129,7 +132,7 @@ runs:
       if: steps.verify-changed-files.outputs.files_changed == 'true'
       uses: ad-m/github-push-action@master
       with:
-        github_token: ${{ secrets.github_token }}
+        github_token: ${{ inputs.github_token }}
         branch: ${{ github.ref }}        
     - id: check-threashold
       run: |
