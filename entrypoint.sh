@@ -52,7 +52,7 @@ then
     done
 
     python -m poetry install $arguments_groups
-  elif [ $package_extras]
+  if [ $package_extras]
   then
     arguments_groups=''
     for i in ${package_extras//,/ }
