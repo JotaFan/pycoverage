@@ -43,22 +43,22 @@ then
   fi
   python -m poetry config virtualenvs.create false
   poetry_groups=$8
-  if [ $poetry_groups ] 
-  then
-    arguments_groups=''
-    for i in ${poetry_groups//,/ }
-    do
-        arguments_groups+=" --with ${i}"
-    done
-
-    python -m poetry install $arguments_groups
-  fi
   if [ $package_extras]
   then
     arguments_groups=''
     for i in ${package_extras//,/ }
     do
         arguments_groups+=" --extra ${i}"
+    done
+
+    python -m poetry install $arguments_groups
+  fi
+  if [ $poetry_groups ] 
+  then
+    arguments_groups=''
+    for i in ${poetry_groups//,/ }
+    do
+        arguments_groups+=" --with ${i}"
     done
 
     python -m poetry install $arguments_groups
