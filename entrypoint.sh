@@ -52,6 +52,7 @@ then
     done
 
     python -m poetry install $arguments_groups
+  fi
   if [ $package_extras]
   then
     arguments_groups=''
