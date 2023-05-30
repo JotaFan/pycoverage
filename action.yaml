@@ -34,10 +34,6 @@ inputs:
     description: 'Add support for async tests'
     required: false
     default: false
-  poetry-version:
-    description: 'Version of poetry. Latest if not specified.'
-    required: false
-    default: ''
   poetry-groups:
     description: 'Poetry group names with the dependencies for the tests.'
     required: false
@@ -57,6 +53,13 @@ inputs:
   github_token:
     description: 'GitHub writing token'
     required: true
+  working_branch:
+    description: 'Working branch'
+    required: false
+    default: 'main'
+  poetry-version:
+    description: 'Version of poetry. Latest if not specified.'
+    required: false
 
 outputs:
   output-table: # id of output
@@ -81,10 +84,11 @@ runs:
         ${{ inputs.cov-threshold-single }} \
         ${{ inputs.cov-threshold-total }} \
         ${{ inputs.async-tests }} \
-        ${{ inputs.poetry-version }} \
         ${{ inputs.poetry-groups }} \
         ${{ inputs.package-extras }} \
         ${{ inputs.output }} \
+        ${{ inputs.overwrite }} \
+        ${{ inputs.poetry-version }} \
       shell: bash
     - run: |
         echo "SHORT_SHA=`echo ${{github.event.after}} | cut -c1-7`" >> $GITHUB_ENV
@@ -112,20 +116,29 @@ runs:
       uses: peter-evans/commit-comment@v2.0.1
       with:
         body: ${{ steps.run-tests.outputs.output-table }}
+    - name: Verify Changed files
+      uses: tj-actions/verify-changed-files@v14
+      id: verify-changed-files
+      with:
+        files: |
+            badges/*
+
     - name: Commit files
       if: steps.verify-changed-files.outputs.files_changed == 'true'
       run: |
         git config --local user.email "github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"
         git add "${{ inputs.output }}"
-        git commit -m "Updated coverage.svg"
+        git commit -m "chore: updating coverage.svg" --no-verify
       shell: bash
     - name: Push changes
       if: steps.verify-changed-files.outputs.files_changed == 'true'
       uses: ad-m/github-push-action@master
       with:
         github_token: ${{ inputs.github_token }}
-        branch: ${{ github.ref }}        
+        branch: ${{ inputs.working_branch }}
+        force_with_lease: true
+  
     - id: check-threashold
       run: |
         if [ "${{ steps.run-tests.outputs.cov-threshold-single-fail }}" == "true" ]; then

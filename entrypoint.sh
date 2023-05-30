@@ -7,11 +7,11 @@
 # $5: cov-threshold-single
 # $6: cov-threshold-total
 # $7: async-tests
-# $8: poetry-version
-# $9: poetry-groups
-# $10: package-extras
-# $11: badge-output
-
+# $8: poetry-groups
+# $9: package-extras
+# $10: badge-output
+# $11: overwrite
+# $12: poetry-version
 
 COV_CONFIG_FILE=.coveragerc
 
@@ -26,13 +26,13 @@ then
   TESTING_TOOLS="$TESTING_TOOLS pytest-asyncio"
 fi
 
-package_extras=$10
+package_extras=${9}
 
 
 # Case insensitive comparing and installing of package-manager
 if [ -f "./pyproject.toml" ] && [ -f "./poetry.lock" ]
 then
-  poetry_version=$8
+  poetry_version=${12}
   if [ $poetry_version ]
   then
     echo "Poetry version $poetry_version provided"
@@ -42,7 +42,7 @@ then
     python -m pip install poetry
   fi
   python -m poetry config virtualenvs.create false
-  poetry_groups=$9
+  poetry_groups=$8
   if [ $poetry_groups ] 
   then
     arguments_groups=''
@@ -135,8 +135,8 @@ echo "cov-threshold-total-fail=$COV_THRESHOLD_TOTAL_FAIL" >> $GITHUB_OUTPUT
 
 pip install -U coverage-badge
 EXTRA_ARGS=""
-if [[ '${{ inputs.overwrite }}' == 'true'  ]]; then
+if [[ ${11} == 'true'  ]]; then
   EXTRA_ARGS+="-f"
 fi
 mkdir -p badges
-coverage-badge $EXTRA_ARGS -o $11
+coverage-badge $EXTRA_ARGS -o ${10}

@@ -1,6 +1,7 @@
 # pycoverage
 
 Initialy forked from [pytest-reporter](https://github.com/dima-engineer/pytest-reporter)
+Using [github-push-action](https://github.com/ad-m/github-push-action)
 
 This GitHub action runs python tests using `pytest` and creates a comment for PR with a coverage table.
 It supports projects with the most popular python package managers (`pip`, `poetry`, `pipenv`)
@@ -60,6 +61,8 @@ jobs:
     name: Unit tests
     steps:
       - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.head_ref }} # be sure to add this ref on your checkout
       - uses: actions/setup-python@v2
         with:
           python-version: '3.9.6' # Define your project python version
@@ -72,6 +75,8 @@ jobs:
           async-tests: true
           poetry-version: 1.4.2
           package-extras: dev,tests
+          github_token: ${{ secrets.github_token }}
+          working_branch: ${{ steps.extract_branch.outputs.branch }}
 ```
 Add the badge to your README.md
 
