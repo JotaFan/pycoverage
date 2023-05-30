@@ -5,6 +5,7 @@ Using [github-push-action](https://github.com/ad-m/github-push-action)
 
 This GitHub action runs python tests using `pytest` and creates a comment for PR with a coverage table.
 It supports projects with the most popular python package managers (`pip`, `poetry`, `pipenv`)
+Optionally can commit the coverage badge into the branch.
 
 [![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org)
 
@@ -47,6 +48,18 @@ It supports projects with the most popular python package managers (`pip`, `poet
 
 - `package-extras`
   - Package extras with the dependencies for the tests, or dev-requirement file if pip
+
+- `output`
+  - Output path to write the coverage badge
+
+- `overwrite`
+  - Overwrite an existing coverage badge.
+
+- `working_branch`
+  - Working_branch
+
+- `commit_badge`
+  - Boolean to either make a commit on the coverage badge or not
 
 ## Template workflow file
 
