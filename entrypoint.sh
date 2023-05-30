@@ -21,6 +21,12 @@ COV_THRESHOLD_TOTAL_FAIL=false
 
 TESTING_TOOLS="pytest pytest-mock coverage"
 
+# install tree with bash
+apt-get update && apt-get install -y tree
+#check the current working directory and list with tree
+pwd
+tree
+
 if [ $7 == true ]
 then
   TESTING_TOOLS="$TESTING_TOOLS pytest-asyncio"
