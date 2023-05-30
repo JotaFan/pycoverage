@@ -128,7 +128,7 @@ runs:
       id: verify-changed-files
       with:
         files: |
-            docs/badges/*
+            docs/build/html/*
 
     - name: Commit files
       if: ${{ (steps.verify-changed-files.outputs.files_changed == 'true') && (inputs.commit_badge == 'true') }} 
