@@ -109,6 +109,7 @@ coverage json -o coverage.json
 
 export COVERAGE_SINGLE_THRESHOLD="$5"
 export COVERAGE_TOTAL_THRESHOLD="$6"
+export COV_BADGE_FILE_PATH="${10}"
 
 TABLE=$(python coverage_handler)
 
@@ -140,5 +141,4 @@ EXTRA_ARGS=""
 if [[ ${11} == 'true'  ]]; then
   EXTRA_ARGS+="-f"
 fi
-mkdir -p badges
 coverage-badge $EXTRA_ARGS -o ${10}

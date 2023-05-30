@@ -8,7 +8,9 @@ COVERAGE_SINGLE_THRESHOLD = float(os.environ.get('COVERAGE_SINGLE_THRESHOLD', 0)
 COVERAGE_TOTAL_THRESHOLD = float(os.environ.get('COVERAGE_TOTAL_THRESHOLD', 0))
 COV_THRESHOLD_SINGLE_FAIL = False
 COV_THRESHOLD_TOTAL_FAIL = False
+COV_BADGE_FILE_PATH = os.environ.get('COV_BADGE_FILE_PATH', "docs/badges/coverage.svg")
 
+os.makedirs(os.path.dirname(COV_BADGE_FILE_PATH), exist_ok=True)
 
 coverage_file = Path(COVERAGE_FILE_PATH)
 with coverage_file.open('r') as file:
