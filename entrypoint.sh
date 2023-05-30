@@ -19,7 +19,7 @@ COV_CONFIG_FILE=.coveragerc
 COV_THRESHOLD_SINGLE_FAIL=false
 COV_THRESHOLD_TOTAL_FAIL=false
 
-TESTING_TOOLS="pytest pytest-mock coverage"
+TESTING_TOOLS="pytest pytest-mock coverage pytest-cov"
 
 if [ $7 == true ]
 then
@@ -95,9 +95,14 @@ cat << EOF > "$COV_CONFIG_FILE"
 omit = $4
 EOF
 
-pip install -U $TESTING_TOOLS
-# Run pytest
-coverage run --source="$2" --rcfile=.coveragerc  -m pytest "$3" --cov-report term-missing
+if [ -f "./pyproject.toml" ] && [ -f "./poetry.lock" ]
+then
+  poetry run coverage run --source="$2" --rcfile=.coveragerc  -m pytest "$3" --cov-report term-missing
+else
+  pip install -U $TESTING_TOOLS
+  # Run pytest
+  coverage run --source="$2" --rcfile=.coveragerc  -m pytest "$3" --cov-report term-missing
+fi
 
 if [ $? == 1 ]
 then
