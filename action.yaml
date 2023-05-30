@@ -123,11 +123,12 @@ runs:
         body: ${{ steps.run-tests.outputs.output-table }}
 
     - name: Verify Changed files
+      if: inputs.commit_badge == 'true'
       uses: tj-actions/verify-changed-files@v14
       id: verify-changed-files
       with:
         files: |
-            badges/*
+            docs/badges/*
 
     - name: Commit files
       if: ${{ (steps.verify-changed-files.outputs.files_changed == 'true') && (inputs.commit_badge == 'true') }} 
