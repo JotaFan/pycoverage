@@ -49,6 +49,9 @@ def order_lines_not_covered(lines_not_covered):
                 lines = str(lines_not_covered[i])
             lines_str += f"{lines} "
             lines = []
+    last_missing = str(lines_not_covered[-1])
+    if last_missing not in lines_str:
+        lines_str += f"{last_missing}"
     return lines_str
 
 
