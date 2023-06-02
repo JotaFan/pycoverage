@@ -8,6 +8,7 @@ It supports projects with the most popular python package managers (`pip`, `poet
 Optionally can commit the coverage badge into the branch.
 
 [![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org)
+[![license](https://img.shields.io/github/license/JotaFan/pycoverage)](LICENSE)
 
 ## Python Packages Used
 
