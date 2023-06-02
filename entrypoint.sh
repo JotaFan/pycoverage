@@ -26,8 +26,7 @@ then
   TESTING_TOOLS="$TESTING_TOOLS pytest-asyncio"
 fi
 
-package_extras=${9}
-
+package_extras=$9
 
 # Case insensitive comparing and installing of package-manager
 if [ -f "./pyproject.toml" ] && [ -f "./poetry.lock" ]
@@ -43,14 +42,13 @@ then
   fi
   python -m poetry config virtualenvs.create false
   poetry_groups=$8
-  if [ $package_extras]
+  if [ $package_extras ]
   then
     arguments_groups=''
     for i in ${package_extras//,/ }
     do
-        arguments_groups+=" --extra ${i}"
+        arguments_groups+=" --extras ${i}"
     done
-
     python -m poetry install $arguments_groups
   fi
   if [ $poetry_groups ] 
@@ -66,7 +64,6 @@ then
     python -m poetry add $TESTING_TOOLS
     python -m poetry install
   fi
-
   python -m poetry shell
 elif [ -f "./Pipfile" ] && [ -f "./Pipfile.lock" ];
 then
@@ -105,7 +102,6 @@ else
   coverage run --source="$2" --rcfile=.coveragerc  -m pytest "$3" --cov-report term-missing
   coverage json -o coverage.json
 fi
-
 if [ $? == 1 ]
 then
   echo "Unit tests failed"
