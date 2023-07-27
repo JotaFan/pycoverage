@@ -3,22 +3,22 @@ from pathlib import Path
 import os
 import sys
 
-COVERAGE_FILE_PATH = './coverage.json'
-COVERAGE_SINGLE_THRESHOLD = float(os.environ.get('COVERAGE_SINGLE_THRESHOLD', 0))
-COVERAGE_TOTAL_THRESHOLD = float(os.environ.get('COVERAGE_TOTAL_THRESHOLD', 0))
+COVERAGE_FILE_PATH = "./coverage.json"
+COVERAGE_SINGLE_THRESHOLD = float(os.environ.get("COVERAGE_SINGLE_THRESHOLD", 0))
+COVERAGE_TOTAL_THRESHOLD = float(os.environ.get("COVERAGE_TOTAL_THRESHOLD", 0))
 COV_THRESHOLD_SINGLE_FAIL = False
 COV_THRESHOLD_TOTAL_FAIL = False
-COV_BADGE_FILE_PATH = os.environ.get('COV_BADGE_FILE_PATH', "docs/badges/coverage.svg")
+COV_BADGE_FILE_PATH = os.environ.get("COV_BADGE_FILE_PATH", "docs/badges/coverage.svg")
 
 os.makedirs(os.path.dirname(COV_BADGE_FILE_PATH), exist_ok=True)
 
 coverage_file = Path(COVERAGE_FILE_PATH)
-with coverage_file.open('r') as file:
+with coverage_file.open("r") as file:
     data = json.load(file)
 output = list()
 
 total_coverage = round(data["totals"]["percent_covered"], 2)
-color = 'red'
+color = "red"
 
 if 50 >= total_coverage > 20:
     color = "orange"
@@ -30,23 +30,27 @@ elif 100 >= total_coverage > 90:
     color = "brightgreen"
 
 
-output.append(f'![pycoverage](https://img.shields.io/static/v1?label=pycoverage🛡️&message={total_coverage}%&color={color})')
-output.append('|Name|Stmts|Miss|Cover|Missing|')
-output.append('| ------ | ------ | ------ | ------ |------ |')
+output.append(
+    f"![pycoverage](https://img.shields.io/static/v1?"
+    f"label=pycoverage🛡️&message={total_coverage}%&color={color})"
+)
+output.append("|Name|Stmts|Miss|Cover|Missing|")
+output.append("| ------ | ------ | ------ | ------ |------ |")
+
 
 def order_lines_not_covered(lines_not_covered):
     lines = []
-    lines_str = ''
-    for i in range(len(lines_not_covered)-1):
-        diff = abs(lines_not_covered[i]-lines_not_covered[i+1])
-        if diff==1:
+    lines_str = ""
+    for i in range(len(lines_not_covered) - 1):
+        diff = abs(lines_not_covered[i] - lines_not_covered[i + 1])
+        if diff == 1:
             lines.append(lines_not_covered[i])
-            lines.append(lines_not_covered[i+1])
+            lines.append(lines_not_covered[i + 1])
         else:
             if lines:
-                lines = f"{min(lines)}-{max(lines)}"
+                lines = f"{min(lines)}-{max(lines)}"  # type:ignore
             else:
-                lines = str(lines_not_covered[i])
+                lines = str(lines_not_covered[i])  # type:ignore
             lines_str += f"{lines} "
             lines = []
     if lines_not_covered:
@@ -56,7 +60,7 @@ def order_lines_not_covered(lines_not_covered):
     return lines_str
 
 
-for file_path, file_data in data.get('files', dict()).items():
+for file_path, file_data in data.get("files", dict()).items():
     file_summary = file_data["summary"]
     num_statements = file_summary["num_statements"]
     missing_lines = file_summary["missing_lines"]
@@ -67,7 +71,7 @@ for file_path, file_data in data.get('files', dict()).items():
     if percent_covered < COVERAGE_SINGLE_THRESHOLD:
         COV_THRESHOLD_SINGLE_FAIL = True
     output.append(
-        f'|{file_path}|{num_statements}|{missing_lines}|{percent_covered}%|{lines_not_covered}'
+        f"|{file_path}|{num_statements}|{missing_lines}|{percent_covered}%|{lines_not_covered}"
     )
 
 totals = data["totals"]
