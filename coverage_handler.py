@@ -2,6 +2,7 @@ import json
 from pathlib import Path
 import os
 import sys
+from typing import List
 
 COVERAGE_FILE_PATH = "./coverage.json"
 COVERAGE_SINGLE_THRESHOLD = float(os.environ.get("COVERAGE_SINGLE_THRESHOLD", 0))
@@ -38,26 +39,19 @@ output.append("|Name|Stmts|Miss|Cover|Missing|")
 output.append("| ------ | ------ | ------ | ------ |------ |")
 
 
-def order_lines_not_covered(lines_not_covered):
-    lines = []
+def sort_lines_not_covered(lines_not_covered: List[int]) -> str:
+    if not lines_not_covered:  # handle empty list
+        return ""
+    lines: List[int] = []
     lines_str = ""
-    for i in range(len(lines_not_covered) - 1):
-        diff = abs(lines_not_covered[i] - lines_not_covered[i + 1])
-        if diff == 1:
-            lines.append(lines_not_covered[i])
-            lines.append(lines_not_covered[i + 1])
-        else:
-            if lines:
-                lines = f"{min(lines)}-{max(lines)}"  # type:ignore
-            else:
-                lines = str(lines_not_covered[i])  # type:ignore
-            lines_str += f"{lines} "
+    for i in range(len(lines_not_covered)):
+        if lines and lines[-1] != lines_not_covered[i] - 1:
+            lines_str += f"{lines[0]}-{lines[-1]} " if lines[0] != lines[-1] else f"{lines[0]} "
             lines = []
-    if lines_not_covered:
-        last_missing = str(lines_not_covered[-1])
-        if last_missing not in lines_str:
-            lines_str += f"{last_missing}"
-    return lines_str
+        lines.append(lines_not_covered[i])
+    # handle the last range or number
+    lines_str += f"{lines[0]}-{lines[-1]} " if lines[0] != lines[-1] else f"{lines[0]} "
+    return lines_str.strip()
 
 
 for file_path, file_data in data.get("files", dict()).items():
@@ -66,7 +60,7 @@ for file_path, file_data in data.get("files", dict()).items():
     missing_lines = file_summary["missing_lines"]
     lines_not_covered = file_data["missing_lines"]
     if isinstance(lines_not_covered, list):
-        lines_not_covered = order_lines_not_covered(lines_not_covered)
+        lines_not_covered = sort_lines_not_covered(lines_not_covered)
     percent_covered = round(file_summary["percent_covered"], 2)
     if percent_covered < COVERAGE_SINGLE_THRESHOLD:
         COV_THRESHOLD_SINGLE_FAIL = True
