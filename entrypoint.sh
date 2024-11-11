@@ -87,10 +87,15 @@ fi
 
 
 # write omit str list to coverage file
-cat << EOF > "$COV_CONFIG_FILE"
+if [ -n "$4" ] && [ -f "./${COV_CONFIG_FILE}" ]; then
+  >&2 echo "Cannot support both user-provided '$COV_CONFIG_FILE' file along with cov-omit-list configuration."
+  exit 1
+elif [ -n "$4" ]; then
+  cat << EOF > "$COV_CONFIG_FILE"
 [run]
 omit = $4
 EOF
+fi
 
 if [ -f "./pyproject.toml" ] && [ -f "./poetry.lock" ]
 then
